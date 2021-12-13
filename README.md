@@ -83,6 +83,8 @@ are fairly self-explanatory. The Redis URL is optional, and defaults to
 
 All services needed can be brought up with `docker-compose up -d` which will build the image and setup the Redis server. 
 
+After pulling, the image will need to be rebuilt with `docker-compose build`.
+
 The currently configured ports are 8080 for HTTP and 8636 for the LDAP server.
 
 ### Testing
@@ -90,3 +92,7 @@ The currently configured ports are 8080 for HTTP and 8636 for the LDAP server.
 To test the LDAP queries run `ldapsearch -x -b "<unique ID>" -H ldap://localhost:8636/`
 
 You will need to refresh the page to see the connections.
+
+### UUID String
+
+All UUID strings are now prepended with "SECTESTING_" to make it easier for security teams to find tested endpoints in logs.

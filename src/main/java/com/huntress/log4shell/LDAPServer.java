@@ -106,7 +106,7 @@ public class LDAPServer
 
             // Store this result
             commands.lpush(key, value);
-            commands.expire(key, 1800);
+            commands.expire(key, 3600);
 
             // Close the connection
             connection.close();

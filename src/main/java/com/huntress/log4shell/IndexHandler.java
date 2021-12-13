@@ -35,7 +35,7 @@ public class IndexHandler implements HttpHandler {
         RedisCommands<String, String> commands = conn.sync();
 
         // Generate a random UUID
-        String uuid = UUID.randomUUID().toString();
+        String uuid = "SECTESTING_" + UUID.randomUUID().toString();
 
         // Store the GUID
         commands.lpush(uuid, "exists");
