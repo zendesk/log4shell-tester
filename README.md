@@ -78,3 +78,15 @@ to test the Log4Shell vulnerability which must include the publicly resolvable
 hostname or IP address of the testing instance itself. The HTTP and LDAP ports
 are fairly self-explanatory. The Redis URL is optional, and defaults to
 `redis://localhost:6379`.
+
+## Docker Compose
+
+All services needed can be brought up with `docker-compose up -d` which will build the image and setup the Redis server. 
+
+The currently configured ports are 8080 for HTTP and 8636 for the LDAP server.
+
+### Testing
+
+To test the LDAP queries run `ldapsearch -x -b "<unique ID>" -H ldap://localhost:8636/`
+
+You will need to refresh the page to see the connections.

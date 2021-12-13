@@ -6,6 +6,8 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.server.RoutingHandler;
 
+import java.net.*;
+
 import io.lettuce.core.*;
 import io.lettuce.core.api.*;
 import io.lettuce.core.api.sync.*;
@@ -17,6 +19,7 @@ public class HTTPServer
     private int port;
     private RedisClient redis;
     private String ldap_url;
+    private String http_hostname;
 
 
     public HTTPServer(int port, String redis_connection_string, String ldap_url) {
@@ -31,10 +34,18 @@ public class HTTPServer
             .get("/", new IndexHandler(redis, ldap_url))
             .get("/view/{uuid}", new ViewHandler(redis, ldap_url))
             .setFallbackHandler(HTTPServer::notFoundHandler);
-
+        
+        // Get hostname for Undertow
+        // This needs to be done as 'localhost' doesn't bind correctly in Docker
+        try{
+            http_hostname = InetAddress.getLocalHost().getHostAddress();
+        } catch( Exception e ) {
+            System.err.println("error: can't get localhost IP address, falling back to localhost");
+            http_hostname = "localhost";
+        }
         // Start the server
         Undertow server = Undertow.builder()
-            .addHttpListener(port, "127.0.0.1", ROUTES)
+            .addHttpListener(port, http_hostname, ROUTES)
             .build();
 
         server.start();

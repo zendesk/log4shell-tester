@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  redis:
+    image: docker.io/bitnami/redis:6.2
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - $PWD/redis_data:/bitnami/redis/data
+  log4jhunter:
+    build: .
+    # Change the 'localhost' here to your actual IP address
+    # First port (8080) is HTTP and second port (8636) is LDAP
+    # If you change any of these ports here, they also need to be changed in `ports:` below
+    command: ["localhost", "8080", "8636", "redis://redis:6379"]
+    ports:
+      - '8080:8080' # HTTP Port
+      - '8636:8636' # LDAP Port
+    depends_on:
+      - redis
